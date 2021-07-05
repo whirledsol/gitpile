@@ -15,7 +15,17 @@ function errorHandler(err, req, res, next) {
   });
 }
 
+
+const asyncRoute = (fn) => (req, res, next) => {
+  //allows for proper express handling, especially with errors
+  return Promise
+      .resolve(fn(req, res, next))
+      .catch(next);
+
+}
+
 module.exports = {
   notFound,
-  errorHandler
+  errorHandler,
+  asyncRoute
 };

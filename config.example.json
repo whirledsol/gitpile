@@ -1,0 +1,19 @@
+{
+    "projects": {
+        "project1": {
+            "Driver": {
+                "path": "c:/abs/path",
+                "compareBranch": "develop  /*same as mainBranch by default*/",
+                "mainBranch": "main  /*overrides global*/",
+                "priority": 1
+            },
+            "Dependency": {
+                "path": "c:/abs/path",
+                "priority": 2
+            }
+        }
+    },
+    "global":{
+        "mainBranch":"master  /*main by default*/"
+    }
+}
