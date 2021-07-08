@@ -15,6 +15,7 @@
     "cors": "^2.8.5",
     "dotenv": "10.0.0",
     "express": "4.17.1",
+    "gitpile": "file:..",
     "helmet": "^4.6.0",
     "morgan": "^1.10.0",
     "simple-git": "2.40.0"

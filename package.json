@@ -1,0 +1,28 @@
+{
+  "name": "gitpile",
+  "version": "1.0.0",
+  "description": "a multiple git repo GUI",
+  "main": "index.js",
+  "devDependencies": {
+    "concurrently": "6.2.0"
+  },
+  "scripts": {
+    "postinstall": "npm i --prefix ./client && npm i --prefix ./server",
+    "develop": "concurrently \"npm run develop --prefix ./client\" \"npm run develop --prefix ./server\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whirledsol/gitpile.git"
+  },
+  "keywords": [
+    "git",
+    "gui",
+    "react"
+  ],
+  "author": "whirledsol",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/whirledsol/gitpile/issues"
+  },
+  "homepage": "https://github.com/whirledsol/gitpile#readme"
+}
