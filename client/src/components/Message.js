@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Box, Paper, Grid, Typography,Icon } from '@material-ui/core';
-import { faces, colorStatusClass } from '../ui/status';
+import { faces, colorStatusClass } from '../helpers/status';
 
 const Message = (props) => {
   const { severity, message, data } = props;
@@ -11,7 +11,7 @@ const Message = (props) => {
     <Box my={4}>
     <Container >
       <Paper>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} display="flex" direction="row" justify="space-evenly" alignItems="center">
           <Grid item md={3} style={{textAlign:'center'}}>
       
             <Icon color={colorClass} className={`fas ${faceClass}`} style={{fontSize:75}}></Icon>

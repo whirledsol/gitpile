@@ -1,13 +1,14 @@
 import { Container } from '@material-ui/core';
 import { useState, useEffect } from 'react';
 import Title from './components/Title';
-import { dbSecure } from 'whirled-react/util/db';
+
 import Message from './components/Message';
 import Loading from 'whirled-react/components/core/flow/Loading';
 import ProjectList from './components/ProjectList';
+import Project from './components/Project';
+import {requestConfig} from './helpers/data';
 
-console.log(process.env);
-const { REACT_APP_SERVER_ROOT } = process.env;
+import {BrowserRouter,Switch,Route} from "react-router-dom";
 
 const App = () => {
 
@@ -15,14 +16,7 @@ const App = () => {
   const [message, setMessage] = useState(null);
 
   useEffect(async _ => {
-    try {
-      const res = await dbSecure.get(`${REACT_APP_SERVER_ROOT}/git/info`);
-      setConfig(res);
-    }
-    catch (ex) {
-      console.error(ex);
-      setMessage({ severity: 0, message: "Whoops. Your config.js file might not be setup." });
-    }
+    requestConfig({setData:setConfig, setMessage:setMessage});
   },[]);
 
   return (
@@ -33,7 +27,12 @@ const App = () => {
       }
       <Loading enable={config == null}>
         {config &&
-          <ProjectList config={config}/>
+          <BrowserRouter>
+          <Switch>
+            <Route path="/project/:id"><Project config={config}/></Route>
+            <Route path="/"><ProjectList config={config}/></Route>
+            </Switch>
+          </BrowserRouter>
         }
       </Loading>
     </>

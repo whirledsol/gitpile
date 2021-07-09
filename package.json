@@ -8,7 +8,7 @@
   },
   "scripts": {
     "postinstall": "npm i --prefix ./client && npm i --prefix ./server",
-    "develop": "concurrently \"npm run develop --prefix ./client\" \"npm run develop --prefix ./server\""
+    "develop": "concurrently --names CLIENT,SERVER \"npm run develop --prefix ./client\" \"npm run develop --prefix ./server\""
   },
   "repository": {
     "type": "git",

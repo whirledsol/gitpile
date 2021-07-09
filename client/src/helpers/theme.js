@@ -22,6 +22,17 @@ const theme = createTheme({
 				'@font-face': [OverpassMono],
 			},
 		},
+		MuiCard:{
+			root:{
+				margin:'1rem',
+				padding:'1rem'
+			}
+		},
+		MuiIcon:{
+			root:{
+				width: 'auto'
+			}
+		}
 	},
 	spacing: factor => `${0.5 * factor}rem`,
 });

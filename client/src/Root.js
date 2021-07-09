@@ -1,7 +1,7 @@
 
 import App from './App';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import theme from './ui/theme';
+import theme from './helpers/theme';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 const Root = ()  => {
