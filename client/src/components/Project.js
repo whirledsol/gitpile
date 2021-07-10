@@ -1,17 +1,20 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { Container, Box } from '@material-ui/core';
 import Repo from './Repo';
 import { useParams } from "react-router-dom";
+import AppContext from '../helpers/AppContext';
 
-const Project = (props) => {
-  const { config } = props;
-  const { id } = useParams();
+const Project = () => {
+  const { config } = useContext(AppContext);
+  const { projectKey } = useParams();
+  
   return (
     <Box my={4}>
       <Container >
-          {Object.entries(config.projects[id]).map(([key, data]) => (
-            <Repo key={key} data={{...data,key:key}}  />))
-          }
+          {Object.entries(config.projects[projectKey]).map(([repoKey, data]) => {
+            data = {...data, repoKey:repoKey, projectKey: projectKey};
+            return <Repo key={repoKey} data={data}  />;
+          })}
       </Container>
     </Box>
   );

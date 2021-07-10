@@ -6,35 +6,52 @@ import Message from './components/Message';
 import Loading from 'whirled-react/components/core/flow/Loading';
 import ProjectList from './components/ProjectList';
 import Project from './components/Project';
-import {requestConfig} from './helpers/data';
+import { requestConfig } from './helpers/data';
 
-import {BrowserRouter,Switch,Route} from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import AppContext from './helpers/AppContext';
+
 
 const App = () => {
 
+  //state
   const [config, setConfig] = useState(null);
   const [message, setMessage] = useState(null);
 
-  useEffect(async _ => {
-    requestConfig({setData:setConfig, setMessage:setMessage});
-  },[]);
 
+  //effects
+  useEffect(async _ => {
+    setConfig(await requestConfig({ setMessage: setMessage }));
+  }, []);
+
+  //computed
+  const contextValue = {
+    setMessage: setMessage,
+    config: config
+  };
+
+  //render
   return (
     <>
-      <Title>gitpile</Title>
-      {message != null &&
-        <Message {...message}/>
-      }
-      <Loading enable={config == null}>
-        {config &&
-          <BrowserRouter>
-          <Switch>
-            <Route path="/project/:id"><Project config={config}/></Route>
-            <Route path="/"><ProjectList config={config}/></Route>
+
+
+
+      <AppContext.Provider value={contextValue}>
+        <BrowserRouter>
+          <Title>gitpile</Title>
+          {message != null &&
+            <Message {...message} />
+          }
+          <Loading enable={config == null}>
+            <Switch>
+              <Route path="/project/:projectKey"><Project /></Route>
+              <Route path="/"><ProjectList /></Route>
             </Switch>
-          </BrowserRouter>
-        }
-      </Loading>
+          </Loading>
+        </BrowserRouter>
+      </AppContext.Provider>
+
+
     </>
   );
 }

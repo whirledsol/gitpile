@@ -11,7 +11,7 @@ export const faces = {
 	10: 'fa-laugh-beam'
 };
 
-export const colorStatusClass = {
+export const feelsColorClass = {
 	0: 'error',
 	1: 'error',
 	2: 'error',

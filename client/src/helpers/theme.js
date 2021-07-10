@@ -32,6 +32,11 @@ const theme = createTheme({
 			root:{
 				width: 'auto'
 			}
+		},
+		MuiDivider:{
+			vertical:{
+				margin:"0 5px"
+			}
 		}
 	},
 	spacing: factor => `${0.5 * factor}rem`,

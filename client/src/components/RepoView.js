@@ -1,6 +1,7 @@
 import React from 'react';
-import { Card, Box, Typography, Grid} from '@material-ui/core';
+import { Card, Box, Typography, Grid, Divider, Icon, Button } from '@material-ui/core';
 import QuickStatusIcon from './QuickStatusIcon';
+import moment from 'moment';
 
 const RepoView = (props) => {
 	const {
@@ -11,41 +12,85 @@ const RepoView = (props) => {
 	} = props;
 
 	const {
-		key,
+		repoKey,
 		path,
 		isGit,
-		branch,
+		current,
 		uncommitted,
 		behind,
 		ahead,
-		last_commit,
-		last_message,
-		last_author,
-		last_date
+		message,
+		hash,
+		author_name,
+		author_email,
+		date
 	} = data;
 
-	console.log('data',data);
+
+	const TitleBox = _=> (<Grid container>
+		<Grid item xs={6}><a href={`file:${path}`}><Typography variant="h5">{repoKey}</Typography></a></Grid>
+		<Grid item xs={6} style={{textAlign:'right'}}><Typography variant="subtitle1" color='secondary'>{current}</Typography></Grid>
+	</Grid>);
 
 
-	const TitleBox = (<>
-		<Typography variant="h5">{key}</Typography>
-		<Typography variant="subtitle1" color='secondary'>{branch}</Typography>
+	const QuickStatusBox = _=> (<QuickStatusIcon {...data} />);
+
+
+	const LatestBox = _=> (<Box>
+		<Grid container>
+			<Grid item xs={6}><Typography variant="overline">Last Commit</Typography></Grid>
+			<Grid item xs={6} style={{textAlign:'right'}}><Typography variant="subtitle2">{(hash ?? '').substring(0,7)}</Typography></Grid>
+		</Grid>
+		
+		<Box borderLeft={3} pl={1} my={1}>
+			<Typography variant="body1">{message}</Typography>
+		</Box>
+
+		<Grid container>
+			<Grid item xs={6}><Typography variant="subtitle2">{author_name}</Typography></Grid>
+			<Grid item xs={6} style={{textAlign:'right'}}><Typography variant="subtitle2">{author_email}</Typography></Grid>
+			<Grid item xs={6}><Typography variant="subtitle2">{moment(date).format('dddd MM/DD/YYYY hh:mm a')}</Typography></Grid>
+			<Grid item xs={6} style={{textAlign:'right'}}><Typography variant="subtitle2">{moment(date).fromNow()}</Typography></Grid>
+		</Grid>
+	</Box>);
+
+
+	const StatusBox = _=> (<Box display="flex">
+		<Box style={{ textAlign: 'right' }}>
+			<Typography variant="overline">Behind</Typography>
+			<Typography variant="h5">{behind}</Typography>
+		</Box>
+		<Divider orientation="vertical" flexItem />
+		<Box>
+			<Typography variant="overline">Ahead</Typography>
+			<Typography variant="h5">{ahead}</Typography>
+		</Box>
+		<Box display="flex" alignItems='end' mx={1} py={1}><Icon className="fas fa-plus" fontSize="small"></Icon></Box>
+		<Box>
+			<Typography variant="overline">Uncomitted</Typography>
+			<Box display="flex" alignItems='end'><Typography variant="h5">{uncommitted}</Typography>&nbsp;files</Box>
+		</Box>
+	</Box>);
+
+
+	const ActionBox = _=> (<>
+		<Box my={1}><Button fullWidth onClick={onUpdate} variant="contained" color="default" startIcon={<Icon className='fas fa-sync'/>}>Update</Button></Box>
+		<Box my={1}><Button fullWidth onClick={onPull} variant="contained" color="secondary" startIcon={<Icon className='fas fa-arrow-alt-circle-down'/>}>Pull &amp; Merge</Button></Box>
+		<Box my={1}><Button fullWidth onClick={onCommit} variant="contained" color="primary" startIcon={<Icon className='fas fa-arrow-alt-circle-up'/>}>Commit &amp; Push</Button></Box>
 	</>);
-	const QuickStatusBox = (<QuickStatusIcon {...data}/>);
-	const LatestBox = (<></>);
-	const StatusBox = (<></>);
-	const ActionBox = (<></>);
 
 	return (
 		<Card elevation={24}>
-			<Grid container>
-				<Grid container item md={8} lg={10}>
-					<Grid item md={6}>{TitleBox}</Grid>
-					<Grid item md={4}>{QuickStatusBox}</Grid>
-					<Grid item md={6}>{LatestBox}</Grid>
-					<Grid item md={4}>{StatusBox}</Grid>
+			<Grid container spacing={4}>
+				<Grid item md={4} lg={5}>
+					{TitleBox()}
+					{isGit && hash && LatestBox()}
 				</Grid>
-				<Grid item md={4} lg={2}>{ActionBox}</Grid>
+				<Grid item md={4} lg={5} container direction="column" justifyContent="space-between">
+					{QuickStatusBox()}
+					{isGit && StatusBox()}
+				</Grid>
+				{isGit && <Grid item md={4} lg={2}>{ActionBox()}</Grid>}
 			</Grid>
 
 		</Card>

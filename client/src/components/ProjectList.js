@@ -1,10 +1,11 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { Container, Box, Grid,Card,Typography } from '@material-ui/core';
 import { Link } from "react-router-dom";
+import AppContext from '../helpers/AppContext';
 
+const ProjectList = () => {
 
-const ProjectList = (props) => {
-  const { config } = props;
+  const { config } = useContext(AppContext);
 
   return (
     <Box my={4}>

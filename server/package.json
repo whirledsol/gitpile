@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "develop": "nodemon src/index.js",
+    "develop": "nodemon src/index.js --watch",
     "lint": "eslint --fix src",
     "test": "mocha --exit"
   },

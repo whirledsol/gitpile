@@ -1,10 +1,10 @@
 import React from 'react';
-import { Icon,Typography } from '@material-ui/core';
+import { Box,Icon,Typography } from '@material-ui/core';
 
 const QuickStatusIcon = (props) => {
 
 	const {
-		key,
+		repoKey,
 		path,
 		isGit,
 		branch,
@@ -20,10 +20,10 @@ const QuickStatusIcon = (props) => {
 
 	const iconColor = 'success';
 	const iconClass = 'fas fa-check-circle';
-
+	
 	//TODO
 
-	return (<Icon className={iconClass} color={iconColor} fontSize="large"></Icon>)
+	return (<Box><Icon className={iconClass} color={iconColor} fontSize="large"></Icon></Box>)
 };
 
 export default QuickStatusIcon;
