@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Box, Typography, Grid, Divider, Icon, Button } from '@material-ui/core';
+import {Card, Box, Typography, Grid, Divider, Icon, Button,Link } from '@material-ui/core';
 import QuickStatusIcon from './QuickStatusIcon';
 import moment from 'moment';
 
@@ -14,11 +14,13 @@ const RepoView = (props) => {
 	const {
 		repoKey,
 		path,
+		compareBranch,
 		isGit,
 		current,
 		uncommitted,
 		behind,
 		ahead,
+		tracking,
 		message,
 		hash,
 		author_name,
@@ -28,12 +30,12 @@ const RepoView = (props) => {
 
 
 	const TitleBox = _=> (<Grid container>
-		<Grid item xs={6}><a href={`file:${path}`}><Typography variant="h5">{repoKey}</Typography></a></Grid>
+		<Grid item xs={6}><Link href={`file:${path}`}><Typography variant="h5">{repoKey}</Typography></Link></Grid>
 		<Grid item xs={6} style={{textAlign:'right'}}><Typography variant="subtitle1" color='secondary'>{current}</Typography></Grid>
 	</Grid>);
 
 
-	const QuickStatusBox = _=> (<QuickStatusIcon {...data} />);
+	const QuickStatusBox = _=> (<QuickStatusIcon data={data} />);
 
 
 	const LatestBox = _=> (<Box>

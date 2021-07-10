@@ -6,12 +6,17 @@ import { OverpassMono } from './fonts';
 
 const theme = createTheme({
 	palette: {
+		type: 'dark',
 		primary: {
-			main: purple[500],
+			main: blue[300],
 		},
 		secondary: {
-			main: blue[500],
+			main: purple[300],
 		},
+		background:{
+			default: '#040d21',
+			paper:'#13161f'
+		}
 	},
 	typography: {
 		fontFamily: 'OverpassMono, Arial',
@@ -20,7 +25,7 @@ const theme = createTheme({
 		MuiCssBaseline: {
 			'@global': {
 				'@font-face': [OverpassMono],
-			},
+			}
 		},
 		MuiCard:{
 			root:{

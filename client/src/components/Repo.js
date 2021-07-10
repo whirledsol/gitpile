@@ -6,7 +6,7 @@ import AppContext from '../helpers/AppContext';
 const Repo = (props) => {
 
   //props
-  const { data: rawData } = props;
+  const { data: rawData, global={} } = props;
   const { projectKey, repoKey } = rawData;
   const { setMessage } = useContext(AppContext);
 
@@ -37,6 +37,7 @@ const Repo = (props) => {
   //computed
   const data = {
     ...rawData,
+    compareBranch: rawData.compareBranch ?? rawData.mainBranch ?? global.mainBranch ?? 'main',
     ...status,
     ...(logs.latest || {}),
     isGit:status.isGit ?? true,

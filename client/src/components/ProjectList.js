@@ -1,24 +1,25 @@
 import React,{useContext} from 'react';
-import { Container, Box, Grid,Card,Typography } from '@material-ui/core';
-import { Link } from "react-router-dom";
+import { Container, Box, Grid,Card,Typography, Link  } from '@material-ui/core';
+import { Link as RouterLink } from "react-router-dom";
 import AppContext from '../helpers/AppContext';
+import AnimatedCard from './AnimatedCard';
 
 const ProjectList = () => {
 
   const { config } = useContext(AppContext);
 
   return (
-    <Box my={4}>
+    <Box py={4}>
       <Container >
         <Grid container>
           {Object.keys(config.projects).map(key => {
             const numRepos = Object.keys(config.projects[key]).length;
             return (<Grid item md={4}>
-              <Link to={`/project/${key}`}>
-                <Card>
+              <Link component={RouterLink} to={`/project/${key}`} underline='none'> 
+                <AnimatedCard>
                   <Box mb={8}><Typography variant="h4">{key}</Typography></Box>
-                  <Typography variant="h3">{numRepos} repo{numRepos == 1 ? '' : 's'}</Typography>
-                </Card>
+                  <Box style={{textAlign:'right'}}><Typography variant="h3">{numRepos} repo{numRepos == 1 ? '' : 's'}</Typography></Box>
+                </AnimatedCard>
               </Link>
             </Grid>);
           })

@@ -9,11 +9,11 @@ const Project = () => {
   const { projectKey } = useParams();
   
   return (
-    <Box my={4}>
+    <Box py={4}>
       <Container >
           {Object.entries(config.projects[projectKey]).map(([repoKey, data]) => {
             data = {...data, repoKey:repoKey, projectKey: projectKey};
-            return <Repo key={repoKey} data={data}  />;
+            return <Repo key={repoKey} data={data} global={config.global} />;
           })}
       </Container>
     </Box>
