@@ -1,6 +1,10 @@
 # gitpile
 A GUI manager for a pile of git repos.
 
+## The need
+1. A GUI
+2. Handle multiple git repos
+3. Give a summary of changes and quick actions to sync up the contents
 
 ## Setup
 1. Create your config.js file at root matching [```config.example.json```](https://github.com/whirledsol/gitpile/blob/master/config.example.json)
