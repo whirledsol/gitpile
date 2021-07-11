@@ -2,7 +2,7 @@ import { Container } from '@material-ui/core';
 import { useState, useEffect } from 'react';
 import Title from './components/Title';
 
-import Message from './components/Message';
+import MessageDialog from './components/MessageDialog';
 import Loading from 'whirled-react/components/core/flow/Loading';
 import ProjectList from './components/ProjectList';
 import Project from './components/Project';
@@ -46,7 +46,7 @@ const App = () => {
         <Title>gitpile</Title>
         <div style={backgroundStyle}>
         {message != null &&
-          <Message {...message} />
+          <MessageDialog {...message} />
         }
         <Loading enable={config == null}>
           <Switch>

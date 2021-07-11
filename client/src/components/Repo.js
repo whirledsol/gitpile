@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import RepoView from './RepoView';
-import { requestStatus, requestLogs } from '../helpers/data';
+import { requestStatus, requestLogs, requestPull, requestCommit } from '../helpers/data';
 import AppContext from '../helpers/AppContext';
 
 const Repo = (props) => {
 
   //props
-  const { data: rawData, global={} } = props;
+  const { data: rawData, global = {} } = props;
   const { projectKey, repoKey } = rawData;
   const { setMessage } = useContext(AppContext);
 
@@ -14,24 +14,38 @@ const Repo = (props) => {
   const [status, setStatus] = useState({});
   const [logs, setLogs] = useState({});
 
-  //methods
-  const requestStatusForRepo = async _ => requestStatus({
+  const baseRequestProps = {
     params: { projectKey: projectKey, repoKey: repoKey },
     setMessage: setMessage
-  });
+  };
 
-  const requestLogsForRepo = async _ => requestLogs({
-    params: { projectKey: projectKey, repoKey: repoKey },
-    setMessage: setMessage
-  });
+  //methods
+  const onUpdate = async _ => {
+    const status = await requestStatus(baseRequestProps);
+    setStatus(status);
+    if (status.isGit ?? true) {
+      setLogs(await requestLogs(baseRequestProps));
+    }
+  };
+
+  const onPull = async _ => {
+    const res = await requestPull(baseRequestProps);
+    if (res.severity !== 0) {
+      setMessage(res);
+    }
+  };
+
+  const onCommit = async (message) => {
+    const params = { ...baseRequestProps.params, message: message };
+    const res = await requestCommit({ ...baseRequestProps, params: params });
+    if (res.severity !== 0) {
+      setMessage(res);
+    }
+  };
 
   //effects
   useEffect(async _ => {
-    const status = await requestStatusForRepo();
-    setStatus(status);
-    if(status.isGit ?? true){
-      setLogs(await requestLogsForRepo());
-    }
+    await onUpdate();
   }, []);
 
   //computed
@@ -40,15 +54,17 @@ const Repo = (props) => {
     compareBranch: rawData.compareBranch ?? rawData.mainBranch ?? global.mainBranch ?? 'main',
     ...status,
     ...(logs.latest || {}),
-    isGit:status.isGit ?? true,
+    isGit: status.isGit ?? true,
     uncommitted: (status.files || []).length,
-    branch:status.current
   };
 
   //render
   return (
     <RepoView
       data={data}
+      onUpdate={onUpdate}
+      onPull={onPull}
+      onCommit={onCommit}
     />
   );
 
