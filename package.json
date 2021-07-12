@@ -7,7 +7,9 @@
     "concurrently": "6.2.0"
   },
   "scripts": {
-    "postinstall": "npm i --prefix ./client && npm i --prefix ./server",
+    "i:client": "npm install --prefix ./client",
+    "i:server":"npm install --prefix ./server",
+    "i:all": "npm run i:client && npm run i:server",
     "develop": "concurrently --names CLIENT,SERVER \"npm run develop --prefix ./client\" \"npm run develop --prefix ./server\""
   },
   "repository": {

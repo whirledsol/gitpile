@@ -10,7 +10,7 @@ A GUI manager for a pile of git repos.
 1. Create your config.js file at root matching [```config.example.json```](https://github.com/whirledsol/gitpile/blob/master/config.example.json)
 2. Install node and npm, whathaveyou
 3. In your favourite terminal, ```cd``` to root
-4. ```npm i```
+4. ```npm run i:all```
 5. ```npm run develop```
 
 ## Issues
