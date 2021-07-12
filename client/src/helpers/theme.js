@@ -42,6 +42,11 @@ const theme = createTheme({
 			vertical:{
 				margin:"0 5px"
 			}
+		},
+		MuiPopover:{
+			paper:{
+				border: '1px solid #eee'
+			}
 		}
 	},
 	spacing: factor => `${0.5 * factor}rem`,

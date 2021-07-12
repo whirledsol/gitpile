@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { Card, Box, Typography, Grid, Divider, Icon, Button, Link,Popover } from '@material-ui/core';
+import { Card, Box, Typography, Grid, Divider, Icon, Button, Link,Popover,Tooltip } from '@material-ui/core';
 import QuickStatusIcon from './QuickStatusIcon';
 import moment from 'moment';
 
@@ -23,6 +23,7 @@ const RepoView = (props) => {
 		behind,
 		ahead,
 		files,
+		diff,
 		tracking,
 		message,
 		hash,
@@ -33,11 +34,14 @@ const RepoView = (props) => {
 
 	//state
 	const [commitBtnEl, setCommitBtnEl] = useState(null);
+	const [commitMessage, setCommitMessage] = useState('');
 
 	//renders
 	const TitleBox = _ => (<Grid container>
 		<Grid item xs={6}><Link href={`file:${path}`}><Typography variant="h5">{repoKey}</Typography></Link></Grid>
-		<Grid item xs={6} style={{ textAlign: 'right' }}><Typography variant="subtitle1" color='secondary'>{current}</Typography></Grid>
+		<Grid item xs={6} style={{ textAlign: 'right' }}>
+			<Tooltip title={`Tracking: ${tracking || 'None'}`}><Typography variant="subtitle1" color='secondary'>{current}</Typography></Tooltip>
+		</Grid>
 	</Grid>);
 
 
@@ -82,15 +86,20 @@ const RepoView = (props) => {
 
 
 	const ActionBox = _ => {
-		const disableCommit = (files ?? []).length === 0;
+		const enableCommit = (files ?? []).length > 0 && diff;
 		return (<>
 			<Box my={1}><Button fullWidth onClick={onUpdate} variant="contained" color="default" startIcon={<Icon className='fas fa-sync' />}>Update</Button></Box>
 			<Box my={1}><Button fullWidth onClick={onPull} variant="contained" color="secondary" startIcon={<Icon className='fas fa-arrow-alt-circle-down' />}>Pull &amp; Merge</Button></Box>
-			<Box my={1}><Button disable={disableCommit} fullWidth onClick={e => setCommitBtnEl(e.currentTarget)} variant="contained" color="primary" startIcon={<Icon className='fas fa-arrow-alt-circle-up' />}>Commit &amp; Push</Button></Box>
+			<Box my={1}><Button fullWidth onClick={e => (enableCommit && setCommitBtnEl(e.currentTarget))} variant="contained" color="primary" startIcon={<Icon className='fas fa-arrow-alt-circle-up' />}>Commit &amp; Push</Button></Box>
 		</>);
 	};
 
 	const CommitPopover = _ => {
+		if(!diff) return null;
+		const displayCount = 10;
+		const byteLineFactor = 100;
+		const diffList = diff.slice(0,displayCount);
+		const overflowCount = diff.length - displayCount;
 		return (
 			<Popover
 				id='commit-popover'
@@ -102,6 +111,14 @@ const RepoView = (props) => {
 			>
 				<Box p={3}>
 				<Typography variant='overline'>File Changes Uncommitted</Typography>
+					<Box pl={2}>
+					{diffList.map(item=>(
+						<Typography variant="body1">{item.file} ({item.changes} {item.binary ?'kb': 'lines'})</Typography>
+					))}
+					{overflowCount > 0 && <Typography variant='caption'>+ {} file{overflowCount > 1 ? 's' : ''}</Typography>}
+					</Box>
+					<textarea value={commitMessage} onChange={e=>setCommitMessage(e.value)} style={{margin:'1rem 0', width:'100%'}} placeholder='Commit Message'></textarea>
+					<Button fullWidth variant="contained" color="primary" startIcon={<Icon className='fas fa-arrow-alt-circle-up' />} onClick={_=>{onCommit(commitMessage)}}>Commit &amp; Push</Button>
 				</Box>
 			</Popover>
 		);

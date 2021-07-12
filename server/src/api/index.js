@@ -14,7 +14,6 @@ router.get('/getConfig', (req, res) => {
   res.json(config);
 });
 
-const git = require('./git');
-router.use('/git', git);
+
 
 module.exports = router;

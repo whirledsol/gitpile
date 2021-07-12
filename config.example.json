@@ -9,7 +9,8 @@
             },
             "Dependency": {
                 "path": "c:/abs/path",
-                "priority": 2
+                "priority": 2,
+                "remote":"aws"
             }
         }
     },

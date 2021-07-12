@@ -38,8 +38,13 @@ export const requestLogs = async ({params, setMessage }) => {
 
 export const requestPull = async ({params, setMessage }) => {
 	const {projectKey,repoKey} = params;
+	
 	try {
-		return await dbSecure.post(`${REACT_APP_SERVER_ROOT}/git/pull/${projectKey}/${repoKey}`);
+		const res = await dbSecure.post(`${REACT_APP_SERVER_ROOT}/git/pull/${projectKey}/${repoKey}`);
+		if (res.severity !== 0) {
+			setMessage(res);
+		}
+		return res;
 	}
 	catch (ex) {
 		console.error(ex);
@@ -50,10 +55,14 @@ export const requestPull = async ({params, setMessage }) => {
 export const requestCommit = async ({params, setMessage }) => {
 	const {projectKey,repoKey, message} = params;
 	try {
-		return await dbSecure.post(`${REACT_APP_SERVER_ROOT}/git/pull/${projectKey}/${repoKey}`,
+		const res = await dbSecure.post(`${REACT_APP_SERVER_ROOT}/git/commit/${projectKey}/${repoKey}`,
 		{
 			message:message
 		});
+		if (res.severity !== 0) {
+			setMessage(res);
+		}
+		return res;
 	}
 	catch (ex) {
 		console.error(ex);
