@@ -10,7 +10,6 @@ const computeQuickStatus = (data)=>{
 		behind,
 		ahead,
 		tracking,
-		compare_uncommitted,
 		compare_behind,
 		compare_ahead
 	} = data;
@@ -34,7 +33,7 @@ const computeQuickStatus = (data)=>{
 	if(compare_behind > 0){
 		return [<Icon className="fas fa-arrow-alt-circle-down" color='warning'></Icon>, `Behind ${compareBranch}`];
 	}
-	if(compare_uncommitted+compare_ahead > 0){
+	if(uncommitted+compare_ahead > 0){
 		return [<Icon className="fas fa-arrow-alt-circle-up" color='warning'></Icon>, `Ahead ${compareBranch}`];
 	}
 	return [<Icon className="fas fa-check-circle" color='success'></Icon>, `Synced`]

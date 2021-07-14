@@ -86,11 +86,12 @@ const RepoView = (props) => {
 
 
 	const ActionBox = _ => {
+		const enablePull = (behind > 0);
 		const enableCommit = (files ?? []).length > 0 && diff;
 		return (<>
 			<Box my={1}><Button fullWidth onClick={onUpdate} variant="contained" color="default" startIcon={<Icon className='fas fa-sync' />}>Update</Button></Box>
-			<Box my={1}><Button fullWidth onClick={onPull} variant="contained" color="secondary" startIcon={<Icon className='fas fa-arrow-alt-circle-down' />}>Pull &amp; Merge</Button></Box>
-			<Box my={1}><Button fullWidth onClick={e => (enableCommit && setCommitBtnEl(e.currentTarget))} variant="contained" color="primary" startIcon={<Icon className='fas fa-arrow-alt-circle-up' />}>Commit &amp; Push</Button></Box>
+			<Box my={1}><Button disabled={!enablePull} fullWidth onClick={onPull} variant="contained" color="secondary" startIcon={<Icon className='fas fa-arrow-alt-circle-down' />}>Pull &amp; Merge</Button></Box>
+			<Box my={1}><Button disabled={!enableCommit} fullWidth onClick={e => (enableCommit && setCommitBtnEl(e.currentTarget))} variant="contained" color="primary" startIcon={<Icon className='fas fa-arrow-alt-circle-up' />}>Commit &amp; Push</Button></Box>
 		</>);
 	};
 

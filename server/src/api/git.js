@@ -1,13 +1,14 @@
 const express = require('express');
 const SimpleGit = require('simple-git');
 const router = express.Router();
-const fs = require('fs');
 const { asyncRoute } = require('../middlewares');
-const { orderBy } = require('../util');
-const { CONFIG_PATH } = process.env;
+const { orderBy,getConfig } = require('../util');
 
-const getRepoInfo = (req) => {
-  var config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
+
+
+
+const getRepoInfo = (req,config=null) => {
+  config = config ?? getConfig();
   const { projectKey, repoKey } = req.params;
   const project = config.projects[projectKey];
   return project[repoKey];
@@ -15,16 +16,21 @@ const getRepoInfo = (req) => {
 
 
 router.get('/status/:projectKey/:repoKey', asyncRoute(async (req, res) => {
-  const { path } = getRepoInfo(req);
+  const config = getConfig();
+  const { path,compareBranch,mainBranch } = getRepoInfo(req,config);
 
   try {
     const simpleGit = SimpleGit(path);
+    await simpleGit.fetch();
     const status = await simpleGit.status();
 
     //get some more info
     status.diff = (await simpleGit.diffSummary()).files || [];
-    status.diff.forEach(x=>x.changes = x.changes ?? (x.after-x.before)/1000.0);
-    status.diff = orderBy(status.diff,x=>Math.abs(x.changes), true);
+    status.diff.forEach(x => x.changes = x.changes ?? (x.after - x.before) / 1000.0);
+    status.diff = orderBy(status.diff, x => Math.abs(x.changes), true);
+
+    //comparebranch
+    status.compareBranch =  compareBranch ?? mainBranch ?? config.global.mainBranch ?? 'main';
 
     res.json(status);
   }
@@ -36,7 +42,6 @@ router.get('/status/:projectKey/:repoKey', asyncRoute(async (req, res) => {
 
 
 router.get('/log/:projectKey/:repoKey', asyncRoute(async (req, res) => {
-
   const { path } = getRepoInfo(req);
   const { limit = 1 } = req.query;
   try {
@@ -52,13 +57,12 @@ router.get('/log/:projectKey/:repoKey', asyncRoute(async (req, res) => {
 
 
 router.post('/pull/:projectKey/:repoKey', asyncRoute(async (req, res) => {
-
   const { path, remote = 'origin' } = getRepoInfo(req);
-  const { branch } = req.params;
   try {
     const simpleGit = SimpleGit(path);
-    await simpleGit.pull(remote, branch);
-    res.json({ severity: 0, message: `Completed pull from ${remote} ${branch}.` });
+    const { current } = await simpleGit.status();
+    await simpleGit.pull(remote, current);
+    res.json({ severity: 0, message: `Completed pull from ${remote} ${current}.` });
   }
   catch (ex) {
     res.json({ severity: 7, message: 'Could not pull.', data: ex.toString() });

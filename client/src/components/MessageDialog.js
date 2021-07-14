@@ -9,11 +9,11 @@ const MessageDialog = (props) => {
   const colorClass = (severity in severityColors) ? severityColors[severity] : severityColors[10];
   return (
     <Dialog onClose={handleClose} open={open}>
-      <Icon color={colorClass} className={`fas ${faceClass}`} style={{ fontSize: 75 }}></Icon>
-
-
-      <Typography variant="h4" color={colorClass}>{message}</Typography>
-      <p>{data}</p>
+      <Box p={3} style={{textAlign:'center'}}>
+        <Icon color={colorClass} className={`fas ${faceClass}`} style={{ fontSize: 75, marginBottom:'0.5rem' }}></Icon>
+        <Typography variant="h4" color={colorClass}>{message}</Typography>
+        <p>{data}</p>
+      </Box>
     </Dialog>
   );
 };

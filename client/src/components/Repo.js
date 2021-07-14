@@ -51,7 +51,6 @@ const Repo = (props) => {
   //computed
   const data = {
     ...rawData,
-    compareBranch: rawData.compareBranch ?? rawData.mainBranch ?? global.mainBranch ?? 'main',
     ...status,
     ...(logs.latest || {}),
     isGit: status.isGit ?? true,
