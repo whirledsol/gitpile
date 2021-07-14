@@ -45,9 +45,7 @@ const App = () => {
       <BrowserRouter>
         <Title>gitpile</Title>
         <div style={backgroundStyle}>
-        {message != null &&
-          <MessageDialog {...message} />
-        }
+        <MessageDialog {...message} open={message != null}/>
         <Loading enable={config == null}>
           <Switch>
             <Route path="/project/:projectKey"><Project /></Route>

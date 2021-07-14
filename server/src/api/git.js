@@ -51,17 +51,17 @@ router.get('/log/:projectKey/:repoKey', asyncRoute(async (req, res) => {
 }));
 
 
-router.post('pu/ll/:projectKey/:repoKey', asyncRoute(async (req, res) => {
+router.post('/pull/:projectKey/:repoKey', asyncRoute(async (req, res) => {
 
   const { path, remote = 'origin' } = getRepoInfo(req);
   const { branch } = req.params;
   try {
     const simpleGit = SimpleGit(path);
-    await simpleGit.pull(origin, branch);
+    await simpleGit.pull(remote, branch);
     res.json({ severity: 0, message: `Completed pull from ${remote} ${branch}.` });
   }
   catch (ex) {
-    res.json({ severity: 7, message: 'Could not commit.', data: ex.toString() });
+    res.json({ severity: 7, message: 'Could not pull.', data: ex.toString() });
   }
 
 }));
