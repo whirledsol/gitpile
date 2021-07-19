@@ -2,25 +2,40 @@ const express = require('express');
 const SimpleGit = require('simple-git');
 const router = express.Router();
 const { asyncRoute } = require('../middlewares');
-const { orderBy,getConfig } = require('../util');
+const { orderBy, getConfig } = require('../util');
 
 
 
 
-const getRepoInfo = (req,config=null) => {
+const getRepoInfo = (req, config = null) => {
   config = config ?? getConfig();
   const { projectKey, repoKey } = req.params;
   const project = config.projects[projectKey];
   return project[repoKey];
 }
 
+router.get('/isGit/:projectKey/:repoKey', asyncRoute(async (req, res) => {
+  try {
+    const { path } = getRepoInfo(req);
+
+    const simpleGit = SimpleGit(path);
+    const isGit = await simpleGit.checkIsRepo();
+    res.json(isGit);
+    return;
+  }
+  catch (ex) {
+    res.json(false);
+  }
+}));
 
 router.get('/status/:projectKey/:repoKey', asyncRoute(async (req, res) => {
-  const config = getConfig();
-  const { path,compareBranch,mainBranch } = getRepoInfo(req,config);
-
+ 
   try {
+    const config = getConfig();
+    const { path, compareBranch, mainBranch, remote = 'origin'} = getRepoInfo(req, config);
+  
     const simpleGit = SimpleGit(path);
+
     await simpleGit.fetch();
     const status = await simpleGit.status();
 
@@ -30,38 +45,50 @@ router.get('/status/:projectKey/:repoKey', asyncRoute(async (req, res) => {
     status.diff = orderBy(status.diff, x => Math.abs(x.changes), true);
 
     //comparebranch
-    status.compareBranch =  compareBranch ?? mainBranch ?? config.global.mainBranch ?? 'main';
-
+    status.compareBranch = compareBranch ?? mainBranch ?? config.global.mainBranch ?? 'main';
+    const compareBranchResults = await simpleGit.raw(['rev-list','--left-right','--count',`${status.current}...${remote}/${status.compareBranch}`]);
+    const [compare_behind,compare_ahead] = compareBranchResults.replace('\n','').split('\t');
+    status.compare_behind = compare_behind;
+    status.compare_ahead = compare_ahead;
+    
     res.json(status);
   }
   catch (ex) {
-    res.json({ isGit: false });
+    res.json({ severity: 7, message: 'Could not get status.', data: ex.toString() });
   }
 
 }));
 
 
 router.get('/log/:projectKey/:repoKey', asyncRoute(async (req, res) => {
-  const { path } = getRepoInfo(req);
-  const { limit = 1 } = req.query;
+ 
   try {
+    const { path } = getRepoInfo(req);
+    const { limit = 1 } = req.query;
+
     const simpleGit = SimpleGit(path);
     const logs = await simpleGit.log({ '--max-count': limit });
     res.json(logs);
   }
   catch (ex) {
-    res.json({ isGit: false });
+    res.json({ severity: 7, message: 'Could not get log.', data: ex.toString() });
   }
 
 }));
 
 
 router.post('/pull/:projectKey/:repoKey', asyncRoute(async (req, res) => {
-  const { path, remote = 'origin' } = getRepoInfo(req);
+ 
   try {
+    const { path, remote = 'origin' } = getRepoInfo(req);
+
     const simpleGit = SimpleGit(path);
+    
+    await simpleGit.fetch();
+
     const { current } = await simpleGit.status();
     await simpleGit.pull(remote, current);
+
     res.json({ severity: 0, message: `Completed pull from ${remote} ${current}.` });
   }
   catch (ex) {
@@ -73,11 +100,12 @@ router.post('/pull/:projectKey/:repoKey', asyncRoute(async (req, res) => {
 
 router.post('/commit/:projectKey/:repoKey', asyncRoute(async (req, res) => {
 
-  const { path, remote = 'origin' } = getRepoInfo(req);
-  const { message } = req.params;
   let tasks = [];
 
   try {
+    const { path, remote = 'origin' } = getRepoInfo(req);
+    const { message } = req.params;
+
     if ((message ?? '').trim() === '') {
       throw 'message not supplied.';
     }

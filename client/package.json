@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "4.12.1",
+    "@material-ui/lab": "4.0.0-alpha.60",
     "axios": "0.21.1",
     "gitpile": "file:..",
     "moment": "2.29.1",

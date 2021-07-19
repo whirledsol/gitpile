@@ -8,7 +8,7 @@
   },
   "scripts": {
     "i:client": "npm install --prefix ./client",
-    "i:server":"npm install --prefix ./server",
+    "i:server": "npm install --prefix ./server",
     "i:all": "npm run i:client && npm run i:server",
     "develop": "concurrently --names CLIENT,SERVER \"npm run develop --prefix ./client\" \"npm run develop --prefix ./server\""
   },

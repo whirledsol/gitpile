@@ -1,5 +1,6 @@
-import React,{useState} from 'react';
-import { Card, Box, Typography, Grid, Divider, Icon, Button, Link,Popover,Tooltip } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Card, Box, Typography, Grid, Divider, Icon, Button, Link, Popover, Tooltip } from '@material-ui/core';
+import {ToggleButton,ToggleButtonGroup} from '@material-ui/lab';
 import QuickStatusIcon from './QuickStatusIcon';
 import moment from 'moment';
 
@@ -29,12 +30,15 @@ const RepoView = (props) => {
 		hash,
 		author_name,
 		author_email,
-		date
+		date,
+		compare_behind,
+		compare_ahead
 	} = data;
 
 	//state
 	const [commitBtnEl, setCommitBtnEl] = useState(null);
 	const [commitMessage, setCommitMessage] = useState('');
+	const [statusView, setStatusView] = useState('current');
 
 	//renders
 	const TitleBox = _ => (<Grid container>
@@ -66,23 +70,44 @@ const RepoView = (props) => {
 		</Grid>
 	</Box>);
 
+	const StatusToggle = _ => {
+		if(compareBranch === current){
+			return (
+				<Button>{current}</Button>
+			);
+		}
+		return (<ToggleButtonGroup
+					value={statusView}
+					exclusive
+					onChange={(_,v)=>{setStatusView(v)}}
+				>
+					<ToggleButton value="current"><Button>{current}</Button></ToggleButton>
+					<ToggleButton value="compare"><Button>{compareBranch}</Button></ToggleButton>
+				</ToggleButtonGroup>
+			);
+	};
 
-	const StatusBox = _ => (<Box display="flex">
-		<Box style={{ textAlign: 'right' }}>
-			<Typography variant="overline">Behind</Typography>
-			<Typography variant="h5">{behind}</Typography>
-		</Box>
-		<Divider orientation="vertical" flexItem />
-		<Box>
-			<Typography variant="overline">Ahead</Typography>
-			<Typography variant="h5">{ahead}</Typography>
-		</Box>
-		<Box display="flex" alignItems='end' mx={1} py={1}><Icon className="fas fa-plus" style={{ fontSize: 12 }}></Icon></Box>
-		<Box>
-			<Typography variant="overline">Uncomitted</Typography>
-			<Box display="flex" alignItems='end'><Typography variant="h5">{uncommitted}</Typography>&nbsp;files</Box>
-		</Box>
-	</Box>);
+	const StatusBox = _ => {
+		const behindDisplay = statusView === 'current' ? behind : compare_behind;
+		const aheadDisplay = statusView === 'current' ? ahead : compare_ahead;
+
+		return (<Box display="flex">
+			<Box style={{ textAlign: 'right' }}>
+				<Typography variant="overline">Behind</Typography>
+				<Typography variant="h5">{behindDisplay}</Typography>
+			</Box>
+			<Divider orientation="vertical" flexItem />
+			<Box>
+				<Typography variant="overline">Ahead</Typography>
+				<Typography variant="h5">{aheadDisplay}</Typography>
+			</Box>
+			<Box display="flex" alignItems='end' mx={1} py={1}><Icon className="fas fa-plus" style={{ fontSize: 12 }}></Icon></Box>
+			<Box>
+				<Typography variant="overline">Uncomitted</Typography>
+				<Box display="flex" alignItems='end'><Typography variant="h5">{uncommitted}</Typography>&nbsp;files</Box>
+			</Box>
+		</Box>);
+	};
 
 
 	const ActionBox = _ => {
@@ -96,10 +121,10 @@ const RepoView = (props) => {
 	};
 
 	const CommitPopover = _ => {
-		if(!diff) return null;
+		if (!diff) return null;
 		const displayCount = 10;
 		const byteLineFactor = 100;
-		const diffList = diff.slice(0,displayCount);
+		const diffList = diff.slice(0, displayCount);
 		const overflowCount = diff.length - displayCount;
 		return (
 			<Popover
@@ -107,19 +132,19 @@ const RepoView = (props) => {
 				open={Boolean(commitBtnEl)}
 				anchorEl={commitBtnEl}
 				onClose={_ => setCommitBtnEl(null)}
-				anchorOrigin={{vertical: 'top',horizontal: 'left'}}
-				transformOrigin={{vertical: 'top',horizontal: 'right'}}
+				anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 			>
 				<Box p={3}>
-				<Typography variant='overline'>File Changes Uncommitted</Typography>
+					<Typography variant='overline'>File Changes Uncommitted</Typography>
 					<Box pl={2}>
-					{diffList.map(item=>(
-						<Typography variant="body1">{item.file} ({item.changes} {item.binary ?'kb': 'lines'})</Typography>
-					))}
-					{overflowCount > 0 && <Typography variant='caption'>+ {} file{overflowCount > 1 ? 's' : ''}</Typography>}
+						{diffList.map(item => (
+							<Typography variant="body1">{item.file} ({item.changes} {item.binary ? 'kb' : 'lines'})</Typography>
+						))}
+						{overflowCount > 0 && <Typography variant='caption'>+ { } file{overflowCount > 1 ? 's' : ''}</Typography>}
 					</Box>
-					<textarea value={commitMessage} onChange={e=>setCommitMessage(e.value)} style={{margin:'1rem 0', width:'100%'}} placeholder='Commit Message'></textarea>
-					<Button fullWidth variant="contained" color="primary" startIcon={<Icon className='fas fa-arrow-alt-circle-up' />} onClick={_=>{onCommit(commitMessage)}}>Commit &amp; Push</Button>
+					<textarea value={commitMessage} onChange={e => setCommitMessage(e.value)} style={{ margin: '1rem 0', width: '100%' }} placeholder='Commit Message'></textarea>
+					<Button fullWidth variant="contained" color="primary" startIcon={<Icon className='fas fa-arrow-alt-circle-up' />} onClick={_ => { onCommit(commitMessage) }}>Commit &amp; Push</Button>
 				</Box>
 			</Popover>
 		);
@@ -133,7 +158,12 @@ const RepoView = (props) => {
 				</Grid>
 				<Grid item md={4} lg={5} container direction="column" justifyContent="space-between">
 					{QuickStatusBox()}
-					{isGit && StatusBox()}
+					{isGit && (
+						<>
+						<StatusToggle />
+						<StatusBox />
+						</>
+					)}
 				</Grid>
 				{isGit && <Grid item md={4} lg={2}>
 					{ActionBox()}

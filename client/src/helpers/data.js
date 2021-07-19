@@ -12,6 +12,19 @@ export const requestConfig = async ({ setMessage }) => {
 	}
 };
 
+
+export const requestIsGit = async ({params, setMessage }) => {
+	const {projectKey,repoKey} = params;
+	try {
+		
+		return await dbSecure.get(`${REACT_APP_SERVER_ROOT}/git/isGit/${projectKey}/${repoKey}`);
+	}
+	catch (ex) {
+		return false;
+	}
+};
+
+
 export const requestStatus = async ({params, setMessage }) => {
 	const {projectKey,repoKey} = params;
 	try {

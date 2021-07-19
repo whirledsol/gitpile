@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import RepoView from './RepoView';
-import { requestStatus, requestLogs, requestPull, requestCommit } from '../helpers/data';
+import { requestIsGit, requestStatus, requestLogs, requestPull, requestCommit } from '../helpers/data';
 import AppContext from '../helpers/AppContext';
 
 const Repo = (props) => {
@@ -11,6 +11,7 @@ const Repo = (props) => {
   const { setMessage } = useContext(AppContext);
 
   //state
+  const [isGit, setIsGit] = useState(false);
   const [status, setStatus] = useState({});
   const [logs, setLogs] = useState({});
 
@@ -21,9 +22,10 @@ const Repo = (props) => {
 
   //methods
   const onUpdate = async _ => {
-    const status = await requestStatus(baseRequestProps);
-    setStatus(status);
-    if (status.isGit ?? true) {
+    const isGit = await requestIsGit(baseRequestProps);
+    setIsGit(isGit);
+    if (isGit) {
+      setStatus(await requestStatus(baseRequestProps));
       setLogs(await requestLogs(baseRequestProps));
     }
   };
@@ -50,10 +52,10 @@ const Repo = (props) => {
 
   //computed
   const data = {
+    isGit:isGit,
     ...rawData,
     ...status,
     ...(logs.latest || {}),
-    isGit: status.isGit ?? true,
     uncommitted: (status.files || []).length,
   };
 
