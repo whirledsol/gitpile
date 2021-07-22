@@ -35,13 +35,20 @@ const Repo = (props) => {
     if (res.severity !== 0) {
       setMessage(res);
     }
+    else{
+      await onUpdate();
+    }
   };
 
   const onCommit = async (message) => {
     const params = { ...baseRequestProps.params, message: message };
+    console.log('params,',params)
     const res = await requestCommit({ ...baseRequestProps, params: params });
     if (res.severity !== 0) {
       setMessage(res);
+    }
+    else{
+      await onUpdate();
     }
   };
 

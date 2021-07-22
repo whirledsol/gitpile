@@ -47,6 +47,17 @@ const theme = createTheme({
 			paper:{
 				border: '1px solid #eee'
 			}
+		},
+		MuiToggleButton:{
+			root:{
+				padding:0,
+				textTransform:'none'
+			}
+		},
+		MuiButton:{
+			root:{
+				textTransform: 'none'
+			}
 		}
 	},
 	spacing: factor => `${0.5 * factor}rem`,

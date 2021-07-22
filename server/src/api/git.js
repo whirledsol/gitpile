@@ -104,7 +104,7 @@ router.post('/commit/:projectKey/:repoKey', asyncRoute(async (req, res) => {
 
   try {
     const { path, remote = 'origin' } = getRepoInfo(req);
-    const { message } = req.params;
+    const { message } = req.body;
 
     if ((message ?? '').trim() === '') {
       throw 'message not supplied.';
@@ -113,7 +113,7 @@ router.post('/commit/:projectKey/:repoKey', asyncRoute(async (req, res) => {
 
     //check that we are tracking
     const { current, tracking } = await simpleGit.status();
-    if (current && !status.tracking) {
+    if (current && !tracking) {
       await simpleGit.branch('--set-upstream-to', `${remote}/${current}`)
       tasks.push('set-upstream-to')
     }

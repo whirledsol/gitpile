@@ -72,17 +72,16 @@ const RepoView = (props) => {
 
 	const StatusToggle = _ => {
 		if(compareBranch === current){
-			return (
-				<Button>{current}</Button>
-			);
+			return null;
 		}
 		return (<ToggleButtonGroup
 					value={statusView}
 					exclusive
 					onChange={(_,v)=>{setStatusView(v)}}
+					style={{width:'100%'}}
 				>
-					<ToggleButton value="current"><Button>{current}</Button></ToggleButton>
-					<ToggleButton value="compare"><Button>{compareBranch}</Button></ToggleButton>
+					<ToggleButton value="current" ><Button style={{padding:'2px 9px'}}>{current}</Button></ToggleButton>
+					<ToggleButton value="compare" ><Button style={{padding:'2px 9px'}}>{compareBranch}</Button></ToggleButton>
 				</ToggleButtonGroup>
 			);
 	};
@@ -143,7 +142,7 @@ const RepoView = (props) => {
 						))}
 						{overflowCount > 0 && <Typography variant='caption'>+ { } file{overflowCount > 1 ? 's' : ''}</Typography>}
 					</Box>
-					<textarea value={commitMessage} onChange={e => setCommitMessage(e.value)} style={{ margin: '1rem 0', width: '100%' }} placeholder='Commit Message'></textarea>
+					<textarea value={commitMessage} onChange={e => setCommitMessage(e.target.value)} style={{ margin: '1rem 0', width: '100%' }} placeholder='Commit Message'></textarea>
 					<Button fullWidth variant="contained" color="primary" startIcon={<Icon className='fas fa-arrow-alt-circle-up' />} onClick={_ => { onCommit(commitMessage) }}>Commit &amp; Push</Button>
 				</Box>
 			</Popover>
@@ -159,10 +158,10 @@ const RepoView = (props) => {
 				<Grid item md={4} lg={5} container direction="column" justifyContent="space-between">
 					{QuickStatusBox()}
 					{isGit && (
-						<>
+						<Box mt={3}>
 						<StatusToggle />
 						<StatusBox />
-						</>
+						</Box>
 					)}
 				</Grid>
 				{isGit && <Grid item md={4} lg={2}>
