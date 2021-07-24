@@ -10,7 +10,7 @@
             "Dependency": {
                 "path": "c:/abs/path",
                 "priority": 2,
-                "remote":"aws"
+                "remote":"aws /*origin by default*/"
             }
         }
     },
