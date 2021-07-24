@@ -49,6 +49,16 @@ export const requestLogs = async ({params, setMessage }) => {
 	}
 };
 
+export const requestConsole = async ({params, setMessage }) => {
+	const {projectKey,repoKey} = params;
+	try {
+		return await dbSecure.get(`${REACT_APP_SERVER_ROOT}/interface/cmd/${projectKey}/${repoKey}`);
+	}
+	catch (ex) {
+		setMessage({ severity: 7, message: `Could not get the console for ${repoKey}` });
+	}
+};
+
 export const requestPull = async ({params, setMessage }) => {
 	const {projectKey,repoKey} = params;
 	

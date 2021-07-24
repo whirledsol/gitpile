@@ -2,7 +2,7 @@ import React,{useContext} from 'react';
 import { Container, Box } from '@material-ui/core';
 import Repo from './Repo';
 import { useParams } from "react-router-dom";
-import AppContext from '../helpers/AppContext';
+import AppContext from '../util/AppContext';
 
 const Project = () => {
   const { config } = useContext(AppContext);

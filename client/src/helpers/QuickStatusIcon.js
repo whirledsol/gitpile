@@ -15,9 +15,9 @@ const computeQuickStatus = (data)=>{
 	} = data;
 
 	if(!isGit){
-		return [(<span class="fa-stack fa-2x">
-					<i class="fas fa-ban fa-stack-2x"></i>
-					<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+		return [(<span className="fa-stack fa-2x">
+					<i className="fas fa-ban fa-stack-2x"></i>
+					<i className="fab fa-github fa-stack-1x fa-inverse"></i>
 				</span>),
 				`Not a git repo.`];
 	}

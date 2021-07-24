@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Card, Box, Typography, Grid, Divider, Icon, Button, Link, Popover, Tooltip } from '@material-ui/core';
-import {ToggleButton,ToggleButtonGroup} from '@material-ui/lab';
-import QuickStatusIcon from './QuickStatusIcon';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import QuickStatusIcon from '../helpers/QuickStatusIcon';
 import moment from 'moment';
+import {amber,blue,pink} from '@material-ui/core/colors';
+import ColorButton from '../helpers/ColorButton';
 
 const RepoView = (props) => {
 
@@ -10,6 +12,7 @@ const RepoView = (props) => {
 	const {
 		data,
 		onUpdate,
+		onConsole,
 		onPull,
 		onCommit
 	} = props;
@@ -41,12 +44,15 @@ const RepoView = (props) => {
 	const [statusView, setStatusView] = useState('current');
 
 	//renders
-	const TitleBox = _ => (<Grid container>
-		<Grid item xs={6}><Link href={`file:${path}`}><Typography variant="h5">{repoKey}</Typography></Link></Grid>
-		<Grid item xs={6} style={{ textAlign: 'right' }}>
-			<Tooltip title={`Tracking: ${tracking || 'None'}`}><Typography variant="subtitle1" color='secondary'>{current}</Typography></Tooltip>
-		</Grid>
-	</Grid>);
+	const TitleBox = _ => {
+		const filePath = `file://${path}`;
+		return (<Grid container>
+			<Grid item xs={6}><Link href={filePath}><Typography variant="h5">{repoKey}</Typography></Link></Grid>
+			<Grid item xs={6} style={{ textAlign: 'right' }}>
+				<Tooltip title={`Tracking: ${tracking || 'None'}`}><Typography variant="subtitle1" color='secondary'>{current}</Typography></Tooltip>
+			</Grid>
+		</Grid>)
+	};
 
 
 	const QuickStatusBox = _ => (<QuickStatusIcon data={data} />);
@@ -71,19 +77,19 @@ const RepoView = (props) => {
 	</Box>);
 
 	const StatusToggle = _ => {
-		if(compareBranch === current){
+		if (compareBranch === current) {
 			return null;
 		}
 		return (<ToggleButtonGroup
-					value={statusView}
-					exclusive
-					onChange={(_,v)=>{setStatusView(v)}}
-					style={{width:'100%'}}
-				>
-					<ToggleButton value="current" ><Button style={{padding:'2px 9px'}}>{current}</Button></ToggleButton>
-					<ToggleButton value="compare" ><Button style={{padding:'2px 9px'}}>{compareBranch}</Button></ToggleButton>
-				</ToggleButtonGroup>
-			);
+			value={statusView}
+			exclusive
+			onChange={(_, v) => { setStatusView(v) }}
+			style={{ width: '100%' }}
+		>
+			<ToggleButton value="current" ><Button style={{ padding: '2px 9px' }}>{current}</Button></ToggleButton>
+			<ToggleButton value="compare" ><Button style={{ padding: '2px 9px' }}>{compareBranch}</Button></ToggleButton>
+		</ToggleButtonGroup>
+		);
 	};
 
 	const StatusBox = _ => {
@@ -114,15 +120,15 @@ const RepoView = (props) => {
 		const enableCommit = (files ?? []).length > 0 && diff;
 		return (<>
 			<Box my={1}><Button fullWidth onClick={onUpdate} variant="contained" color="default" startIcon={<Icon className='fas fa-sync' />}>Update</Button></Box>
-			<Box my={1}><Button disabled={!enablePull} fullWidth onClick={onPull} variant="contained" color="secondary" startIcon={<Icon className='fas fa-arrow-alt-circle-down' />}>Pull &amp; Merge</Button></Box>
-			<Box my={1}><Button disabled={!enableCommit} fullWidth onClick={e => (enableCommit && setCommitBtnEl(e.currentTarget))} variant="contained" color="primary" startIcon={<Icon className='fas fa-arrow-alt-circle-up' />}>Commit &amp; Push</Button></Box>
+			<Box my={1}><ColorButton fullWidth onClick={onConsole} variant="contained" color={blue} startIcon={<Icon className='fas fa-terminal' />}>Open Console</ColorButton></Box>
+			<Box my={1}><ColorButton disabled={!enablePull} fullWidth onClick={onPull} variant="contained" color={amber} startIcon={<Icon className='fas fa-arrow-alt-circle-down' />}>Pull &amp; Merge</ColorButton></Box>
+			<Box my={1}><ColorButton disabled={!enableCommit} fullWidth onClick={e => (enableCommit && setCommitBtnEl(e.currentTarget))} variant="contained" color={pink} startIcon={<Icon className='fas fa-arrow-alt-circle-up' />}>Commit &amp; Push</ColorButton></Box>
 		</>);
 	};
 
 	const CommitPopover = _ => {
 		if (!diff) return null;
 		const displayCount = 10;
-		const byteLineFactor = 100;
 		const diffList = diff.slice(0, displayCount);
 		const overflowCount = diff.length - displayCount;
 		return (
@@ -159,8 +165,8 @@ const RepoView = (props) => {
 					{QuickStatusBox()}
 					{isGit && (
 						<Box mt={3}>
-						<StatusToggle />
-						<StatusBox />
+							<StatusToggle />
+							<StatusBox />
 						</Box>
 					)}
 				</Grid>

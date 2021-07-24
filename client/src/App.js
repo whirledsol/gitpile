@@ -1,14 +1,13 @@
-import { Container } from '@material-ui/core';
 import { useState, useEffect } from 'react';
-import Title from './components/Title';
+import Title from './helpers/Title';
 
-import MessageDialog from './components/MessageDialog';
+import MessageDialog from './helpers/MessageDialog';
 import Loading from 'whirled-react/components/core/flow/Loading';
 import ProjectList from './components/ProjectList';
 import Project from './components/Project';
-import { requestConfig } from './helpers/data';
+import { requestConfig } from './util/requests';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import AppContext from './helpers/AppContext';
+import AppContext from './util/AppContext';
 
 
 const App = () => {

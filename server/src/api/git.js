@@ -2,22 +2,11 @@ const express = require('express');
 const SimpleGit = require('simple-git');
 const router = express.Router();
 const { asyncRoute } = require('../middlewares');
-const { orderBy, getConfig } = require('../util');
-
-
-
-
-const getRepoInfo = (req, config = null) => {
-  config = config ?? getConfig();
-  const { projectKey, repoKey } = req.params;
-  const project = config.projects[projectKey];
-  return project[repoKey];
-}
+const { orderBy, getConfig, getRepoInfo} = require('../util');
 
 router.get('/isGit/:projectKey/:repoKey', asyncRoute(async (req, res) => {
   try {
     const { path } = getRepoInfo(req);
-
     const simpleGit = SimpleGit(path);
     const isGit = await simpleGit.checkIsRepo();
     res.json(isGit);

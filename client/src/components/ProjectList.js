@@ -1,8 +1,8 @@
 import React,{useContext} from 'react';
 import { Container, Box, Grid,Card,Typography, Link  } from '@material-ui/core';
 import { Link as RouterLink } from "react-router-dom";
-import AppContext from '../helpers/AppContext';
-import AnimatedCard from './AnimatedCard';
+import AppContext from '../util/AppContext';
+import AnimatedCard from '../helpers/AnimatedCard';
 
 const ProjectList = () => {
 

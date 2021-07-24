@@ -15,6 +15,7 @@
         }
     },
     "global":{
-        "mainBranch":"master  /*main by default*/"
+        "mainBranch":"master  /*main by default*/",
+        "consoleOpenCommand":"\"C:\\Program Files\\Git\\git-bash.exe\" --cd=\"{0}\""
     }
 }

@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
-
+const {API_VERSION} = process.env;
 
 
 const middlewares = require('./middlewares');
@@ -17,11 +17,12 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-const api = require('./api');
-const git = require('./api/git');
-
-app.use('/api/v1', api);
-app.use('/api/v1/git', git);
+const route_api = require('./api');
+const route_git = require('./api/git');
+const route_interface = require('./api/interface');
+app.use(`/api/${API_VERSION}`, route_api);
+app.use(`/api/${API_VERSION}/git`, route_git);
+app.use(`/api/${API_VERSION}/interface`, route_interface);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);

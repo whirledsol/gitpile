@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Box, Paper, Grid, Typography, Icon, Dialog } from '@material-ui/core';
-import { faces, severityColors } from '../helpers/severity';
+import { faces, severityColors } from '../util/severity';
 
 const MessageDialog = (props) => {
   const { open, severity, message, data, handleClose } = props;

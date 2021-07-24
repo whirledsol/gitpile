@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import RepoView from './RepoView';
-import { requestIsGit, requestStatus, requestLogs, requestPull, requestCommit } from '../helpers/data';
-import AppContext from '../helpers/AppContext';
+import { requestIsGit, requestStatus, requestLogs, requestConsole, requestPull, requestCommit } from '../util/requests';
+import AppContext from '../util/AppContext';
 
 const Repo = (props) => {
 
@@ -30,6 +30,13 @@ const Repo = (props) => {
     }
   };
 
+  const onConsole = async _ => {
+    const res = await requestConsole(baseRequestProps);
+    if (res.severity !== 0) {
+      setMessage(res);
+    }
+  }
+
   const onPull = async _ => {
     const res = await requestPull(baseRequestProps);
     if (res.severity !== 0) {
@@ -42,7 +49,6 @@ const Repo = (props) => {
 
   const onCommit = async (message) => {
     const params = { ...baseRequestProps.params, message: message };
-    console.log('params,',params)
     const res = await requestCommit({ ...baseRequestProps, params: params });
     if (res.severity !== 0) {
       setMessage(res);
@@ -71,6 +77,7 @@ const Repo = (props) => {
     <RepoView
       data={data}
       onUpdate={onUpdate}
+      onConsole={onConsole}
       onPull={onPull}
       onCommit={onCommit}
     />
