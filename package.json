@@ -4,13 +4,15 @@
   "description": "a multiple git repo GUI",
   "main": "index.js",
   "devDependencies": {
-    "concurrently": "6.2.0"
+    "concurrently": "6.2.0",
+    "electron": "13.1.7"
   },
   "scripts": {
     "i:client": "npm install --prefix ./client",
     "i:server": "npm install --prefix ./server",
-    "i:all": "npm run i:client && npm run i:server",
-    "develop": "concurrently --names CLIENT,SERVER \"npm run develop --prefix ./client\" \"npm run develop --prefix ./server\""
+    "i:all": "npm i && npm run i:client && npm run i:server",
+    "develop": "concurrently --names CLIENT,SERVER \"npm run develop --prefix ./client\" \"npm run develop --prefix ./server\"",
+    "execute": "electron run.js"
   },
   "repository": {
     "type": "git",
