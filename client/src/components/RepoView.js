@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Box, Typography, Grid, Divider, Icon, Button, Link, Popover, Tooltip } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import QuickStatusIcon from '../helpers/QuickStatusIcon';
@@ -19,7 +19,6 @@ const RepoView = (props) => {
 
 	const {
 		repoKey,
-		path,
 		compareBranch,
 		isGit,
 		current,
@@ -29,6 +28,7 @@ const RepoView = (props) => {
 		files,
 		diff,
 		tracking,
+		remote,
 		message,
 		hash,
 		author_name,
@@ -37,17 +37,23 @@ const RepoView = (props) => {
 		compare_behind,
 		compare_ahead
 	} = data;
-
+	
 	//state
 	const [commitBtnEl, setCommitBtnEl] = useState(null);
 	const [commitMessage, setCommitMessage] = useState('');
 	const [statusView, setStatusView] = useState('current');
 
+
+	//effects
+	useEffect(_=>{
+		//clear display stuff on status change
+		setCommitBtnEl(null);
+	},[date])
+
 	//renders
 	const TitleBox = _ => {
-		const filePath = `file://${path}`;
 		return (<Grid container>
-			<Grid item xs={6}><Link href={filePath}><Typography variant="h5">{repoKey}</Typography></Link></Grid>
+			<Grid item xs={6}><Link href={remote} target="_blank"><Typography variant="h5">{repoKey}</Typography></Link></Grid>
 			<Grid item xs={6} style={{ textAlign: 'right' }}>
 				<Tooltip title={`Tracking: ${tracking || 'None'}`}><Typography variant="subtitle1" color='secondary'>{current}</Typography></Tooltip>
 			</Grid>

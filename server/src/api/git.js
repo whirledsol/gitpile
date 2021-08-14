@@ -33,6 +33,9 @@ router.get('/status/:projectKey/:repoKey', asyncRoute(async (req, res) => {
     status.diff.forEach(x => x.changes = x.changes ?? (x.after - x.before) / 1000.0);
     status.diff = orderBy(status.diff, x => Math.abs(x.changes), true);
 
+    //remote path
+    status.remote = await simpleGit.raw(['remote','get-url',remote]);
+
     //comparebranch
     status.compareBranch = compareBranch ?? mainBranch ?? config.global.mainBranch ?? 'main';
     const compareBranchResults = await simpleGit.raw(['rev-list','--left-right','--count',`${status.current}...${remote}/${status.compareBranch}`]);
@@ -103,7 +106,7 @@ router.post('/commit/:projectKey/:repoKey', asyncRoute(async (req, res) => {
     //check that we are tracking
     const { current, tracking } = await simpleGit.status();
     if (current && !tracking) {
-      await simpleGit.branch('--set-upstream-to', `${remote}/${current}`)
+      await simpleGit.raw(['branch','--set-upstream-to', `${remote}/${current}`]);
       tasks.push('set-upstream-to')
     }
 
