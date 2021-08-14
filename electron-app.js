@@ -11,11 +11,13 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 1440, height: 810})
 
   // and load the index.html of the app.
   // 'public' is the path where webpack bundles my app
-  mainWindow.loadURL(`file://${__dirname}/client/public/index.html`);
+  const url = `file://${__dirname}/client/build/index.html`;
+  console.log('Openning',url);
+  mainWindow.loadURL(url);
 
   // Open the DevTools.
   //mainWindow.webContents.openDevTools()

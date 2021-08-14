@@ -7,7 +7,9 @@ const path = require('path');
 
 
 const server = _=>{
-	require('dotenv').config();
+	const envPath = path.join(path.resolve(__dirname),'../.env');
+	console.log('looking for .env',envPath);
+	require('dotenv').config({path:envPath});
 	const {API_VERSION} = process.env;
 
 
