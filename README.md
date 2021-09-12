@@ -11,7 +11,9 @@ A GUI manager for a pile of git repos.
 2. Install node and npm, whathaveyou
 3. In your favourite terminal, ```cd``` to root
 4. ```npm run i:all```
-5. ```npm run develop```
+5. Now what?
+   1. To develop/test: ```npm run develop```
+   3. To build/create an executable: ```npm run package```
 
 ## Issues
 1. [Use github](https://github.com/whirledsol/gitpile/issues)
