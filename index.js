@@ -11,7 +11,13 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1440, height: 810})
+  mainWindow = new BrowserWindow({
+    width: 1440,
+    height: 810,
+    webPreferences: {
+      webSecurity: false
+    }
+  });
 
   // and load the index.html of the app.
   // 'public' is the path where webpack bundles my app
