@@ -16,7 +16,7 @@
     "develop": "concurrently --names CLIENT,SERVER \"npm run develop --prefix ./client\" \"npm run develop --prefix ./server\"",
     "build": "npm run build --prefix ./client",
     "electron": "npm run build && electron index.js",
-    "package": "electron-packager . gitpile --platform=win32 --arch=x64 --out build --overwrite",
+    "package": "npm run build && electron-packager . gitpile --platform=win32 --arch=x64 --out build --overwrite --icon=./client/public/favicon.ico",
     "clean": "rimraf  ./package-lock.json && rimraf ./server/node_modules && rimraf ./server/package-lock.json && rimraf ./client/node_modules && rimraf ./client/package-lock.json"
   },
   "repository": {
