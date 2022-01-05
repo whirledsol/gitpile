@@ -1,11 +1,11 @@
 {
   "name": "gitpile",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a multiple git repo GUI",
   "main": "index.js",
   "devDependencies": {
-    "concurrently": "^6.2.1",
-    "electron": "^14.0.0",
+    "concurrently": "^7.0.0",
+    "electron": "^16.0.6",
     "electron-packager": "^15.4.0",
     "rimraf": "^3.0.2"
   },

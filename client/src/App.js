@@ -6,7 +6,7 @@ import ProjectList from './components/ProjectList';
 import Project from './components/Project';
 import EditConfig from './components/EditConfig';
 import { requestConfig } from './util/requests';
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppContext from './util/AppContext';
 
 
@@ -46,11 +46,11 @@ const App = () => {
         <div style={backgroundStyle}>
         <MessageDialog {...message} open={message != null}/>
         <Loading enable={config == null}>
-          <Switch>
-            <Route path="/edit"><EditConfig /></Route>
-            <Route path="/project/:projectKey"><Project /></Route>
-            <Route path="/"><ProjectList /></Route>
-          </Switch>
+          <Routes>
+            <Route path="/" element={<ProjectList />}/>
+            <Route path="project/:projectKey" element={<Project />}/>
+            <Route path="edit" element={<EditConfig />}/>
+          </Routes>
         </Loading>
         </div>
       </BrowserRouter>
