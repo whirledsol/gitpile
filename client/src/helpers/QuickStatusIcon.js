@@ -25,16 +25,16 @@ const computeQuickStatus = (data)=>{
 		return [<Icon className="fas fa-cloud" color='danger'></Icon>, `Not tracked remotely`];
 	}
 	if(behind > 0){
-		return [<Icon className="fas fa-arrow-alt-circle-down" color='danger'></Icon>, `${current} Behind`];
+		return [<Icon className="fas fa-arrow-alt-circle-down" color='danger'></Icon>, `your ${current} is behind`];
 	}
 	if(uncommitted+ahead > 0){
-		return [<Icon className="fas fa-arrow-alt-circle-up" color='danger'></Icon>, `${current} Ahead`];
+		return [<Icon className="fas fa-arrow-alt-circle-up" color='danger'></Icon>, `your ${current} is ahead`];
 	}
 	if(compare_behind > 0){
-		return [<Icon className="fas fa-arrow-alt-circle-down" color='warning'></Icon>, `${compareBranch} Behind `];
+		return [<Icon className="fas fa-arrow-alt-circle-down" color='warning'></Icon>, `your ${compareBranch} is behind `];
 	}
 	if(uncommitted+compare_ahead > 0){
-		return [<Icon className="fas fa-arrow-alt-circle-up" color='warning'></Icon>, `${compareBranch} Ahead`];
+		return [<Icon className="fas fa-arrow-alt-circle-up" color='warning'></Icon>, `your ${compareBranch} is ahead`];
 	}
 	return [<Icon className="fas fa-check-circle" color='success'></Icon>, `Synced`]
 };
